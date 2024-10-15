@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Etkinlik Katılımcıları</title>
+    <title>Katılımcı Listesi</title>
     <style>
         table {
             width: 50%;
@@ -30,7 +30,64 @@
         <tbody id="userTable"></tbody>
     </table>
 
+    <h1>Katılımcı Listesi</h1>
+    <ul id="participant-list"></ul>
+
+    <h2>Yeni Katılımcı Ekle</h2>
+    <form id="participant-form">
+        <input type="text" id="name" placeholder="İsim Soyisim" required>
+        <select id="paid">
+            <option value="true">Ödendi</option>
+            <option value="false">Ödenmedi</option>
+        </select>
+        <button type="submit">Ekle</button>
+    </form>
+
     <script>
+        const participantList = document.getElementById('participant-list');
+        const participantForm = document.getElementById('participant-form');
+
+        // Katılımcı listesini yükle
+        async function loadParticipants() {
+            const response = await fetch('users.json');
+            const data = await response.json();
+            const content = atob(data.content);
+            const users = JSON.parse(content);
+            
+            participantList.innerHTML = '';
+            users.forEach(user => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${user.name} - Ödendi: ${user.paid}`;
+                participantList.appendChild(listItem);
+            });
+        }
+
+        // Form gönderildiğinde
+        participantForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const paid = document.getElementById('paid').value === 'true';
+
+            const response = await fetch('https://rey1w99c32.execute-api.eu-west-1.amazonaws.com/dev/katilimci', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, paid })
+            });
+
+            if (response.ok) {
+                alert('Katılımcı eklendi!');
+                loadParticipants();
+                participantForm.reset();
+            } else {
+                alert('Bir hata oluştu.');
+            }
+        });
+
+        loadParticipants();
+
         async function loadUsers() {
             const response = await fetch('users.json');
             const users = await response.json();
