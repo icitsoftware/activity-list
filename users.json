@@ -22,5 +22,9 @@
     {
         "name": "test",
         "paid": true
+    },
+    {
+        "name": "IOS QA Team",
+        "paid": false
     }
 ]
