@@ -1,0 +1,5 @@
+[
+    {"name": "Ali Veli", "paid": true},
+    {"name": "Ayşe Demir", "paid": false},
+    {"name": "Mehmet Yılmaz", "paid": true}
+]
