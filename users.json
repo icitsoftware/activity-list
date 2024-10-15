@@ -18,5 +18,9 @@
     {
         "name": "Fatma Kaya",
         "paid": false
+    },
+    {
+        "name": "test",
+        "paid": true
     }
 ]
